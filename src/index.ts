@@ -1,4 +1,5 @@
 import * as express from "express";
+import * as cors from "cors";   
 import { AppDataSource } from "./data-source";
 import router from "./routes";
 
@@ -7,12 +8,16 @@ AppDataSource.initialize()
         const app = express();
         const port = 5000;
 
-        app.use(express.json());
-        app.use("/", router);
+        const corsOptions = {
+            "origin": "*",
+            "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+            "preflightContinue": false,
+            "optionsSuccessStatus": 204
+        };        
 
-        // app.get("/", (req: Request, res: Response) => {
-        //     res.send("Hello World");
-        // })
+        app.use(express.json());
+        app.use(cors(corsOptions));
+        app.use("/", router);
 
         app.listen(port, () => {
             console.log(`Server is running at http://localhost:${port}`);

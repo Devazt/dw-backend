@@ -1,24 +1,24 @@
 import { Request, Response } from "express";
-import SPaslon from "../services/SPaslon";
+import SPartai from "../services/SPartai";
 
 export default new class CPaslon {
     find(req: Request, res: Response) {
-        SPaslon.find(req,res)
+        SPartai.find(req,res)
     }
 
     findOne(req: Request, res: Response) {
-        SPaslon.findOne(req, res)
+        SPartai.findOne(req, res)
     }
 
     create(req: Request, res: Response) {
-        SPaslon.create(req, res)
+        SPartai.create(req, res)
     }
 
     update(req: Request, res: Response) {
-        SPaslon.update(req, res)
+        SPartai.update(req, res)
     }
 
     delete(req: Request, res: Response) {
-        SPaslon.delete(req, res)
+        SPartai.delete(req, res)
     }
 }

@@ -13,4 +13,12 @@ export default new class CPemilu {
     create(req: Request, res: Response) {
         SPemilu.create(req, res)
     }
+
+    update(req: Request, res: Response) {
+        SPemilu.update(req, res)
+    }
+
+    delete(req: Request, res: Response) {
+        SPemilu.delete(req, res)
+    }
 }

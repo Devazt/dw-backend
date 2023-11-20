@@ -1,24 +1,24 @@
 import { Request, Response } from "express";
-import SPaslon from "../services/SPaslon";
+import SPeserta from "../services/SPeserta";
 
-export default new class CPaslon {
+export default new class CPeserta {
     find(req: Request, res: Response) {
-        SPaslon.find(req,res)
+        SPeserta.find(req,res)
     }
 
     findOne(req: Request, res: Response) {
-        SPaslon.findOne(req, res)
+        SPeserta.findOne(req, res)
     }
 
     create(req: Request, res: Response) {
-        SPaslon.create(req, res)
+        SPeserta.create(req, res)
     }
 
     update(req: Request, res: Response) {
-        SPaslon.update(req, res)
+        SPeserta.update(req, res)
     }
 
     delete(req: Request, res: Response) {
-        SPaslon.delete(req, res)
+        SPeserta.delete(req, res)
     }
 }
