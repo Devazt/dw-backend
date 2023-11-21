@@ -1,7 +1,10 @@
 import * as express from "express";
 import * as cors from "cors";   
 import { AppDataSource } from "./data-source";
-import router from "./routes";
+import RPemilu from "./routes/RPemilu";
+import RPeserta from "./routes/RPeserta";
+import RPartai from "./routes/RPartai";
+import RPaslon from "./routes/RPaslon";
 
 AppDataSource.initialize()
     .then(async () => {
@@ -17,7 +20,10 @@ AppDataSource.initialize()
 
         app.use(express.json());
         app.use(cors(corsOptions));
-        app.use("/", router);
+        app.use("/", RPemilu);
+        app.use("/", RPaslon);
+        app.use("/", RPartai);
+        app.use("/", RPeserta);
 
         app.listen(port, () => {
             console.log(`Server is running at http://localhost:${port}`);
