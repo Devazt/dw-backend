@@ -14,7 +14,9 @@ export default new class SPartai {
 
     async find(req: Request, res: Response): Promise<Response> {
         try {
-            const partais = await this.RepoPartai.find();
+            const partais = await this.RepoPartai.find({
+                relations: ["paslon"]
+            });
             return res.status(200).json({message: "Find All Success", data: partais});
         } catch (error) {
             return res.status(500).json(error.message);
@@ -25,7 +27,7 @@ export default new class SPartai {
         try {
             const id:number = Number(req.params.id);
 
-        const data = await this.RepoPartai.findOneBy({id});
+        const data = await this.RepoPartai.find({where: {id}, relations: ["paslon"]});
         if (!data) {
             return res.status(404).json({ message: "Data not found" });
         }
@@ -61,7 +63,8 @@ export default new class SPartai {
                 address: data.address,
                 image: cloud.secure_url,
                 createdAt,
-                updatedAt
+                updatedAt,
+                paslon: data.paslonId
             });
 
             await unlinkAsync(req.file.path);

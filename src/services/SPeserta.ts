@@ -9,7 +9,9 @@ export default new class SPeserta {
 
     async find(req: Request, res: Response): Promise<Response> {
         try {
-            const pesertas = await this.RepoPeserta.find();
+            const pesertas = await this.RepoPeserta.find({
+                relations: ["users", "paslon"]
+            });
             return res.status(200).json({message: "Find All Success", data: pesertas});
         } catch (error) {
             return res.status(500).json(error.message);
@@ -20,7 +22,7 @@ export default new class SPeserta {
         try {
             const id:number = Number(req.params.id);
 
-            const data = await this.RepoPeserta.findOneBy({id});
+            const data = await this.RepoPeserta.find({where : {id}, relations: ["users", "paslon"]});
             if (!data) {
                 return res.status(404).json({ message: "Data not found" });
             }
@@ -33,82 +35,19 @@ export default new class SPeserta {
     async create(req: Request, res: Response): Promise<Response> {
         try {
             const data = req.body
-            let count = await this.getCount() + 1;
+            data.usersId = res.locals.loginSession.user.id
 
             const { error } = CrPesertaSchema.validate(data);
             if(error) return res.status(400).json(error.message);
 
-            let createdAt: Date | undefined = data.createdAt;
-            let updatedAt: Date | undefined = data.updatedAt;
-            if(createdAt == undefined) createdAt = new Date();
-            if(updatedAt == undefined) updatedAt = new Date();
-
             const newPeserta = await this.RepoPeserta.create({
-                name: data.name,
-                no_urut: count,
-                address: data.address,
-                gender: data.gender,
-                vote_paslon: data.vote_paslon,
-                createdAt,
-                updatedAt
+                users: data.usersId,
+                paslon: data.paslonId
             });
-
-            const result = await this.RepoPeserta.save(newPeserta);
-            return res.status(201).json({message: "Create Success", data: result});
+            await this.RepoPeserta.save(newPeserta);
+            return res.status(201).json({message: "Vote Success", data: newPeserta});
         } catch (error) {
             return res.status(500).json(error.message);
         }
-    }
-
-    async update(req: Request, res: Response): Promise<Response> {
-        try {
-            const id:number = Number(req.params.id);
-            const json = req.body;
-
-            const data = await this.RepoPeserta.findOneBy({id});
-            if (!data) {
-                return res.status(404).json({ message: "Data not found" });
-            }
-            let name: string | undefined = json.name ?? data.name;
-            let no_urut: number | undefined = json.no_urut ?? data.no_urut;
-            let address: string | undefined = json.address ?? data.address;
-            let gender: string | undefined = json.gender ?? data.gender;
-            let vote_paslon: string | undefined = json.vote_paslon ?? data.vote_paslon;
-
-            await this.RepoPeserta.update({id}, {
-                name : name,
-                no_urut : no_urut,
-                address : address,
-                gender : gender,
-                vote_paslon : vote_paslon,
-                updatedAt : new Date()
-            });
-            
-
-            const viewData = await this.RepoPeserta.findOneBy({id});
-            return res.status(200).json({message: "Update Success", data: viewData});
-        } catch (error) {
-            return res.status(500).json(error.message);
-        }
-    }
-
-    async delete(req: Request, res: Response): Promise<Response> {
-        try {
-            const id:number = Number(req.params.id);
-            const data = await this.RepoPeserta.findOneBy({id});
-            if (!data) {
-                return res.status(404).json({ message: "Data not found" });
-            }
-            await this.RepoPeserta.remove(data);
-            return res.status(200).json({message: "Delete Success"});
-        } catch (error) {
-            return res.status(500).json(error.message);
-        }
-    }
-
-
-    async getCount(): Promise<number> {
-        const count = await this.RepoPeserta.count();
-        return count;
     }
 }

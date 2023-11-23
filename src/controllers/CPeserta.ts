@@ -13,12 +13,4 @@ export default new class CPeserta {
     create(req: Request, res: Response) {
         SPeserta.create(req, res)
     }
-
-    update(req: Request, res: Response) {
-        SPeserta.update(req, res)
-    }
-
-    delete(req: Request, res: Response) {
-        SPeserta.delete(req, res)
-    }
 }

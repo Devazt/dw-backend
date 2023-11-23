@@ -1,25 +1,18 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Paslon } from "./Paslon";
+import { Users } from "./Users";
 
 @Entity()
 export class Peserta {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
-    name: string;
+    @OneToOne(() => Users, (users) => users.peserta)
+    @JoinColumn()
+    users: Users
 
-    @Column()
-    no_urut: number;
-
-    @Column()
-    address: string;
-
-    @Column()
-    gender: string;
-
-    @Column()
-    vote_paslon: string;
+    @ManyToOne(() => Paslon, (paslon) => paslon.peserta)
+    paslon: Paslon
 
     @CreateDateColumn({
         type: "timestamp",

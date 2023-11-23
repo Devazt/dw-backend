@@ -14,10 +14,12 @@ export default new class SPemilu {
 
     async find(req: Request, res: Response): Promise<Response> {
         try {
-            const pemilus = await this.RepoPemilu.find();
+            const pemilus = await this.RepoPemilu.find({
+                relations: ["users"]
+            });
             return res.status(200).json({message: "Find All Success", data: pemilus});
         } catch (error) {
-            return res.status(500).json({ message: "Something went wrong" });
+            return res.status(500).json(error.message);
         }
     }
 
@@ -25,7 +27,10 @@ export default new class SPemilu {
         try {
             const id:number = Number(req.params.id);
 
-        const data = await this.RepoPemilu.findOneBy({id});
+        const data = await this.RepoPemilu.find({
+            where: {id},
+            relations: ["users"]
+        });
 
         if (data == undefined) return res.status(404).json({ message: "Data not found" });
         return res.status(200).json({ message: "Find by id Success", data: data});
@@ -37,6 +42,9 @@ export default new class SPemilu {
     async create(req: Request, res: Response): Promise<Response> {
         try {
             const data = req.body
+            data.author = res.locals.loginSession.user.fullname
+            data.users = res.locals.loginSession.user.id
+            
 
             const { error } = CrPemiluSchema.validate(data);
             if(error) return res.status(400).json(error.message);
@@ -57,7 +65,8 @@ export default new class SPemilu {
                 description: data.description,
                 image: cloud.secure_url,
                 createdAt,
-                updatedAt
+                updatedAt,
+                users: data.users
             });
 
             await unlinkAsync(req.file.path);

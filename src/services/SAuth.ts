@@ -1,11 +1,10 @@
 import { Repository } from "typeorm";
-import { Users } from "../entities/users";
+import { Users } from "../entities/Users";
 import { AppDataSource } from "../data-source";
 import { Request, Response } from "express";
 import { CrUserLogSchema, CrUserRegSchema } from "../utils/VUsers";
 import * as bcrypt from "bcrypt";
 import * as jwt from "jsonwebtoken";
-import * as session from "express-session";
 
 export default new class SUsers {
     private readonly AuthUser: Repository<Users> = AppDataSource.getRepository(Users)
@@ -58,6 +57,17 @@ export default new class SUsers {
             const token = jwt.sign({user}, "keyboard cat", {expiresIn: "1h"});
             return res.status(200).json({message: "Login Success", token: token});
 
+        } catch (error) {
+            return res.status(500).json(error.message);
+        }
+    }
+
+    async find(req: Request, res: Response): Promise<Response> {
+        try {
+            const users = await this.AuthUser.find({
+                relations: ["pemilu", "peserta"]
+            });
+            return res.status(200).json({message: "Find All Success", data: users});
         } catch (error) {
             return res.status(500).json(error.message);
         }

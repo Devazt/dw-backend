@@ -14,7 +14,7 @@ export default new class SPaslon {
 
     async find(req: Request, res: Response): Promise<Response> {
         try {
-            const paslons = await this.RepoPaslon.find();
+            const paslons = await this.RepoPaslon.find({relations: ["partai"]} );
             return res.status(200).json({message: "Find All Success", data: paslons});
         } catch (error) {
             return res.status(500).json(error.message);

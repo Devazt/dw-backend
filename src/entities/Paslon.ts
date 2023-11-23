@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, Column, UpdateDateColumn, BeforeInsert, BeforeUpdate } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, Column, UpdateDateColumn, BeforeInsert, BeforeUpdate, OneToMany, ManyToOne } from "typeorm"
+import { Partai } from "./Partai";
+import { Peserta } from "./Peserta";
 
 @Entity()
 export class Paslon {
@@ -16,6 +18,15 @@ export class Paslon {
     
     @Column()
     image: string;
+
+    @OneToMany(() => Partai, (partai) => partai.paslon, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+    })
+    partai: Partai[]
+
+    @OneToMany(() => Peserta, (peserta) => peserta.paslon)
+    peserta: Peserta
     
     @CreateDateColumn({
         type: "timestamp",

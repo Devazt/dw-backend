@@ -1,6 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-
-
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Pemilu } from "./Pemilu";
+import { Peserta } from "./Peserta";
 
 @Entity()
 export class Users {
@@ -11,10 +11,28 @@ export class Users {
     fullname: string;
 
     @Column()
+    address: string;
+
+    @Column()
+    gender: string;
+
+    @Column()
     username: string;
 
     @Column()
     password: string;
+
+    @OneToOne(() => Peserta, (peserta) => peserta.users, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+    })
+    peserta: Peserta
+
+    @OneToMany(() => Pemilu, (pemilu) => pemilu.users, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+    })
+    pemilu: Pemilu[]
 
     @CreateDateColumn({
         type: "timestamp",

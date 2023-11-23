@@ -9,4 +9,8 @@ export default new class CAuth {
     login(req: Request, res: Response) {
         SAuth.login(req, res)
     }
+
+    find(req: Request, res: Response) {
+        SAuth.find(req, res)
+    }
 }

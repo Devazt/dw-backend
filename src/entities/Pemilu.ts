@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, Column, UpdateDateColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, Column, UpdateDateColumn, ManyToOne } from "typeorm"
+import { Users } from "./Users"
 
 @Entity()
 export class Pemilu {
@@ -16,7 +17,10 @@ export class Pemilu {
     
     @Column()
     image: string;
-    
+
+    @ManyToOne(() => Users, users => users.pemilu)
+    users: Users
+        
     @CreateDateColumn({
         type: "timestamp",
         default: () => "CURRENT_TIMESTAMP",

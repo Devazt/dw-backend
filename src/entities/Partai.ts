@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Paslon } from "./Paslon";
 
 
 @Entity()
@@ -36,4 +37,7 @@ export class Partai {
         onUpdate: "CURRENT_TIMESTAMP",
     })
     updatedAt: Date;
+
+    @ManyToOne(() => Paslon, (paslon) => paslon.partai)
+    paslon: Paslon
 }
