@@ -45,7 +45,7 @@ export default new class SPeserta {
                 paslon: data.paslonId
             });
             await this.RepoPeserta.save(newPeserta);
-            return res.status(201).json({message: "Vote Success", data: newPeserta});
+            return res.status(201).json({message: "Vote Success", data: newPeserta, relations: ["users", "paslon"]});
         } catch (error) {
             return res.status(500).json(error.message);
         }

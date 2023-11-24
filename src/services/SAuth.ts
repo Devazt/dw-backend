@@ -72,4 +72,14 @@ export default new class SUsers {
             return res.status(500).json(error.message);
         }
     }
+
+    async findOne(req: Request, res: Response): Promise<Response> {
+        try {
+            const id = Number(req.params.id);
+            const user = await this.AuthUser.find({where: {id: id}, relations: ["pemilu", "peserta"]});
+            return res.status(200).json({message: "Find One Success", data: user});
+        } catch (error) {
+            return res.status(500).json(error.message);
+        }  
+    }
 }

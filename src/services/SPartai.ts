@@ -50,6 +50,8 @@ export default new class SPartai {
                 tags: "partai"
             });
 
+            await unlinkAsync(req.file.path);
+
             let createdAt: Date | undefined = data.createdAt;
             let updatedAt: Date | undefined = data.updatedAt;
             if(createdAt == undefined) createdAt = new Date();
@@ -67,8 +69,6 @@ export default new class SPartai {
                 paslon: data.paslonId
             });
 
-            await unlinkAsync(req.file.path);
-
             const result = await this.RepoPartai.save(newPartai);
             return res.status(200).json({message: "Create Success", data: result});
 
@@ -80,19 +80,20 @@ export default new class SPartai {
     async update(req: Request, res: Response): Promise<Response> {
         try { 
             const id:number = Number(req.params.id);
-            const json = req.body
+            const newData = req.body
 
             const data = await this.RepoPartai.findOneBy({id});
             if (!data) {
                 return res.status(404).json({ message: "Data not found" });
             }
 
-            let name: string | undefined = json.name ?? data.name;
-            let leader: string | undefined = json.leader ?? data.leader;
-            let no_urut: number | undefined = json.no_urut ?? data.no_urut;
-            let visi_misi: string | undefined = json.visi_misi ?? data.visi_misi;
-            let address: string | undefined = json.address ?? data.address;
-            let image: string | undefined = json.image ?? data.image;
+            let name: string | undefined = newData.name ?? data.name;
+            let leader: string | undefined = newData.leader ?? data.leader;
+            let no_urut: number | undefined = newData.no_urut ?? data.no_urut;
+            let visi_misi: string | undefined = newData.visi_misi ?? data.visi_misi;
+            let address: string | undefined = newData.address ?? data.address;
+            let image: string | undefined = newData.image ?? data.image;
+            let paslon: any | undefined = newData.paslonId ?? data.paslon;
 
             if (req.file) {
                 const urlArray = image.split("/")
@@ -114,10 +115,11 @@ export default new class SPartai {
                 visi_misi : visi_misi,
                 address : address,
                 image : image,
-                updatedAt : new Date()
+                updatedAt : new Date(),
+                paslon : paslon
             });
 
-            const viewData = await this.RepoPartai.findOneBy({id});
+            const viewData = await this.RepoPartai.findOne({where: {id}, relations: ["paslon"]});
             return res.status(200).json({message: "Update Success", data: viewData});
 
         } catch (error) {

@@ -25,7 +25,7 @@ export default new class SPaslon {
         try {
             const id:number = Number(req.params.id);
 
-        const data = await this.RepoPaslon.findOneBy({id});
+        const data = await this.RepoPaslon.findOne({where: {id}, relations: ["partai"]});
         if (!data) {
             return res.status(404).json({ message: "Data not found" });
         }
@@ -48,6 +48,8 @@ export default new class SPaslon {
                 tags: "paslon"
             });
 
+            await unlinkAsync(req.file.path);
+
             let createdAt: Date | undefined = data.createdAt;
             let updatedAt: Date | undefined = data.updatedAt;
             if(createdAt == undefined) createdAt = new Date();
@@ -61,8 +63,6 @@ export default new class SPaslon {
                 createdAt,
                 updatedAt
             });
-
-            await unlinkAsync(req.file.path);
 
             const result = await this.RepoPaslon.save(newPaslon);
             return res.status(200).json({message: "Create Success", data: result});
@@ -108,7 +108,7 @@ export default new class SPaslon {
                 updatedAt: new Date()
             });
 
-            const viewData = await this.RepoPaslon.findOneBy({id});
+            const viewData = await this.RepoPaslon.findOne({where: {id}, relations: ["partai"]});
             return res.status(200).json({message: "Update Success", data: viewData});
         } catch (error) {
             return res.status(500).json(error.message)

@@ -25,7 +25,10 @@ export class Paslon {
     })
     partai: Partai[]
 
-    @OneToMany(() => Peserta, (peserta) => peserta.paslon)
+    @OneToMany(() => Peserta, (peserta) => peserta.paslon, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+    })
     peserta: Peserta
     
     @CreateDateColumn({

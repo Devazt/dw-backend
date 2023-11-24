@@ -13,4 +13,8 @@ export default new class CAuth {
     find(req: Request, res: Response) {
         SAuth.find(req, res)
     }
+
+    findOne(req: Request, res: Response) {
+        SAuth.findOne(req, res)
+    }
 }
