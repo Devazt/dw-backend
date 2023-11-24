@@ -11,7 +11,8 @@ export class Peserta {
     @JoinColumn()
     users: Users
 
-    @ManyToOne(() => Paslon, (paslon) => paslon.peserta)
+    @OneToOne(() => Paslon, (paslon) => paslon.peserta)
+    @JoinColumn()
     paslon: Paslon
 
     @CreateDateColumn({

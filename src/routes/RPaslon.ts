@@ -5,9 +5,9 @@ import AuthToken from "../middleware/AuthToken";
 
 const RPaslon = express.Router();
 
-RPaslon.get("/api/v1/paslon", AuthToken.Authentication, CPaslon.find);
+RPaslon.get("/api/v1/paslon", CPaslon.find);
+RPaslon.get("/api/v1/paslon/:id", CPaslon.findOne);
 RPaslon.post("/api/v1/paslon", AuthToken.Authentication, upload.single("image"), CPaslon.create);
-RPaslon.get("/api/v1/paslon/:id", AuthToken.Authentication, CPaslon.findOne);
 RPaslon.patch("/api/v1/paslon/:id", AuthToken.Authentication, upload.single("image"), CPaslon.update);
 RPaslon.delete("/api/v1/paslon/:id", AuthToken.Authentication, CPaslon.delete);
 

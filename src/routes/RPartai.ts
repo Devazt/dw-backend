@@ -5,9 +5,9 @@ import AuthToken from "../middleware/AuthToken";
 
 const RPartai = express.Router();
 
-RPartai.get("/api/v1/partai", AuthToken.Authentication, CPartai.find);
+RPartai.get("/api/v1/partai", CPartai.find);
+RPartai.get("/api/v1/partai/:id", CPartai.findOne);
 RPartai.post("/api/v1/partai", AuthToken.Authentication, upload.single("image"), CPartai.create);
-RPartai.get("/api/v1/partai/:id", AuthToken.Authentication, CPartai.findOne);
 RPartai.patch("/api/v1/partai/:id", AuthToken.Authentication, upload.single("image"), CPartai.update);
 RPartai.delete("/api/v1/partai/:id", AuthToken.Authentication, CPartai.delete);
 

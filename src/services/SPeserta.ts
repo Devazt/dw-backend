@@ -18,24 +18,13 @@ export default new class SPeserta {
         }
     }
 
-    async findOne(req: Request, res: Response): Promise<Response> {
-        try {
-            const id:number = Number(req.params.id);
-
-            const data = await this.RepoPeserta.find({where : {id}, relations: ["users", "paslon"]});
-            if (!data) {
-                return res.status(404).json({ message: "Data not found" });
-            }
-            return res.status(200).json({message: "Find by id Success", data: data});
-        } catch (error) {
-            return res.status(500).json(error.message);
-        }
-    }
-
     async create(req: Request, res: Response): Promise<Response> {
         try {
             const data = req.body
             data.usersId = res.locals.loginSession.user.id
+
+            const voteCount = await this.RepoPeserta.count({where: {users: data.usersId}});
+            if(voteCount > 0) return res.status(400).json({message: "You have already voted"});
 
             const { error } = CrPesertaSchema.validate(data);
             if(error) return res.status(400).json(error.message);

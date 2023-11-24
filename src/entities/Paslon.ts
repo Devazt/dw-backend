@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, Column, UpdateDateColumn, BeforeInsert, BeforeUpdate, OneToMany, ManyToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, Column, UpdateDateColumn, BeforeInsert, BeforeUpdate, OneToMany, ManyToOne, OneToOne } from "typeorm"
 import { Partai } from "./Partai";
 import { Peserta } from "./Peserta";
 
@@ -25,7 +25,7 @@ export class Paslon {
     })
     partai: Partai[]
 
-    @OneToMany(() => Peserta, (peserta) => peserta.paslon, {
+    @OneToOne(() => Peserta, (peserta) => peserta.paslon, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
     })
