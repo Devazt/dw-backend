@@ -1,24 +1,24 @@
 import { Request, Response } from "express"
-import SPemilu from "../services/SPemilu"
+import SArticle from "../services/SArticle"
 
 export default new class CPemilu {
     find(req: Request, res: Response) {
-        SPemilu.find(req, res)        
+        SArticle.find(req, res)        
     }
 
     findOne(req: Request, res: Response) {
-        SPemilu.findOne(req, res)
+        SArticle.findOne(req, res)
     }
 
     create(req: Request, res: Response) {
-        SPemilu.create(req, res)
+        SArticle.create(req, res)
     }
 
     update(req: Request, res: Response) {
-        SPemilu.update(req, res)
+        SArticle.update(req, res)
     }
 
     delete(req: Request, res: Response) {
-        SPemilu.delete(req, res)
+        SArticle.delete(req, res)
     }
 }

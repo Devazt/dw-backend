@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, CreateDateColumn, Column, UpdateDateCol
 import { Users } from "./Users"
 
 @Entity()
-export class Pemilu {
+export class Article {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -18,7 +18,7 @@ export class Pemilu {
     @Column()
     image: string;
 
-    @ManyToOne(() => Users, users => users.pemilu)
+    @ManyToOne(() => Users, users => users.article)
     users: Users
         
     @CreateDateColumn({

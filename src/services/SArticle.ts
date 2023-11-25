@@ -1,23 +1,21 @@
 import { Repository } from "typeorm"
-import { Pemilu } from "../entities/Pemilu"
+import { Article } from "../entities/Article"
 import { AppDataSource } from "../data-source"
 import { Request,Response } from "express"
-import { CrPemiluSchema } from "../utils/VPemilu"
+import { CrArticleSchema } from "../utils/VArticle"
 import cloudinary from "../middleware/Cloudinary"
 import { promisify } from "util"
 import * as fs from "fs"
 
 const unlinkAsync = promisify(fs.unlink);
 
-export default new class SPemilu {
-    private readonly RepoPemilu: Repository<Pemilu> = AppDataSource.getRepository(Pemilu)
+export default new class SArticle {
+    private readonly RepoArticle: Repository<Article> = AppDataSource.getRepository(Article)
 
     async find(req: Request, res: Response): Promise<Response> {
         try {
-            const pemilus = await this.RepoPemilu.find({
-                relations: ["users"]
-            });
-            return res.status(200).json({message: "Find All Success", data: pemilus});
+            const articles = await this.RepoArticle.find();
+            return res.status(200).json({message: "Find All Success", data: articles});
         } catch (error) {
             return res.status(500).json(error.message);
         }
@@ -27,13 +25,10 @@ export default new class SPemilu {
         try {
             const id:number = Number(req.params.id);
 
-        const data = await this.RepoPemilu.find({
-            where: {id},
-            relations: ["users"]
-        });
+        const article = await this.RepoArticle.findOne({where: {id}});
 
-        if (data == undefined) return res.status(404).json({ message: "Data not found" });
-        return res.status(200).json({ message: "Find by id Success", data: data});
+        if (article == undefined) return res.status(404).json({ message: "Data not found" });
+        return res.status(200).json({ message: "Find by id Success", data: article});
         } catch (error) {
             return res.status(500).json({ message: "Something went wrong" });
         }
@@ -46,7 +41,7 @@ export default new class SPemilu {
             data.users = res.locals.loginSession.user.id
             
 
-            const { error } = CrPemiluSchema.validate(data);
+            const { error } = CrArticleSchema.validate(data);
             if(error) return res.status(400).json(error.message);
 
             const cloud = await cloudinary.uploader.upload(req.file.path, {
@@ -61,7 +56,7 @@ export default new class SPemilu {
             if(createdAt == undefined) createdAt = new Date();
             if(updatedAt == undefined) updatedAt = new Date();
 
-            const newPemilu = await this.RepoPemilu.create({
+            const newPemilu = await this.RepoArticle.create({
                 title: data.title,
                 author: data.author,
                 description: data.description,
@@ -71,8 +66,8 @@ export default new class SPemilu {
                 users: data.users
             });
             
-            const savedPemilu = await this.RepoPemilu.save(newPemilu);
-            return res.status(200).json({message: "Create Success", data: savedPemilu});            
+            const savedArticle = await this.RepoArticle.save(newPemilu);
+            return res.status(200).json({message: "Create Success", data: savedArticle});            
         } catch (error) {
             return res.status(500).json(error.message);
         }        
@@ -83,14 +78,18 @@ export default new class SPemilu {
             const id:number = Number(req.params.id);
             const newData = req.body
             newData.userId = res.locals.loginSession.user.id
+            console.log(newData.userId);
+            
 
-            const data = await this.RepoPemilu.findOneBy({id});
+            const data = await this.RepoArticle.findOneBy({id});
             if (!data) {
                 return res.status(404).json({ message: "Data not found" });
             }
 
-            const checkId = await this.RepoPemilu.findOneBy({users: newData.userId});
-            if (checkId !== data) {
+            const checkId = await this.RepoArticle.findOne({where: {id} , relations: ["users"]});
+            console.log(checkId);
+            
+            if (checkId.users.id !== newData.userId) {
                 return res.status(400).json({ message: "User not allowed to edit" });
             }
             let title: string | undefined = newData.title ?? data.title;
@@ -112,7 +111,7 @@ export default new class SPemilu {
                 await unlinkAsync(req.file.path);
             }
 
-            await this.RepoPemilu.update({id}, {
+            await this.RepoArticle.update({id}, {
                 title: title,
                 author: author,
                 description: description,
@@ -120,7 +119,7 @@ export default new class SPemilu {
                 updatedAt: new Date()
             });
 
-            const viewData = await this.RepoPemilu.findOneBy({id});
+            const viewData = await this.RepoArticle.findOneBy({id});
             return res.status(200).json({message: "Update Success", data: viewData});
         } catch (error) {
             return res.status(500).json(error.message);
@@ -130,7 +129,7 @@ export default new class SPemilu {
     async delete (req: Request, res: Response): Promise<Response> {
         try {
             const id:number = Number(req.params.id);
-            const data = await this.RepoPemilu.findOneBy({id});
+            const data = await this.RepoArticle.findOneBy({id});
             if (!data) {
                 return res.status(404).json({ message: "Data not found" });
             }
@@ -140,7 +139,7 @@ export default new class SPemilu {
             const publicId = imageName.split('.')[0];
             await cloudinary.uploader.destroy("pemilu/" + publicId);
 
-            await this.RepoPemilu.delete({id});
+            await this.RepoArticle.delete({id});
             return res.status(200).json({message: "Delete Success"});
 
         } catch (error) {

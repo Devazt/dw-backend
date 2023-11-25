@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import SPeserta from "../services/SPeserta";
+import SVote from "../services/SVote";
 
 export default new class CPeserta {
     find(req: Request, res: Response) {
-        SPeserta.find(req,res)
+        SVote.find(req,res)
     }
     create(req: Request, res: Response) {
-        SPeserta.create(req, res)
+        SVote.create(req, res)
     }
 }

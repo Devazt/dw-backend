@@ -2,8 +2,8 @@ import * as express from "express";
 import * as session from "express-session";
 import * as cors from "cors";   
 import { AppDataSource } from "./data-source";
-import RPemilu from "./routes/RPemilu";
-import RPeserta from "./routes/RPeserta";
+import RArticle from "./routes/RArticle";
+import RVote from "./routes/RVote";
 import RPartai from "./routes/RPartai";
 import RPaslon from "./routes/RPaslon";
 import RAuth from "./routes/RAuth";
@@ -27,10 +27,10 @@ AppDataSource.initialize()
         }));
         app.use(express.json());
         app.use(cors(corsOptions));
-        app.use("/", RPemilu);
+        app.use("/", RArticle);
         app.use("/", RPaslon);
         app.use("/", RPartai);
-        app.use("/", RPeserta);
+        app.use("/", RVote);
         app.use("/", RAuth);
 
         app.listen(port, () => {

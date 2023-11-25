@@ -1,6 +1,6 @@
 import * as Joi from 'joi';
 
-export const CrPesertaSchema = Joi.object({
+export const CrVoteSchema = Joi.object({
     usersId: Joi.number().required(),
     paslonId: Joi.number().required()
 })

@@ -1,18 +1,17 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { CreateDateColumn, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Paslon } from "./Paslon";
 import { Users } from "./Users";
 
 @Entity()
-export class Peserta {
+export class Vote {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @OneToOne(() => Users, (users) => users.peserta)
+    @OneToOne(() => Users, (users) => users.vote)
     @JoinColumn()
     users: Users
 
-    @OneToOne(() => Paslon, (paslon) => paslon.peserta)
-    @JoinColumn()
+    @ManyToOne(() => Paslon, (paslon) => paslon.vote)
     paslon: Paslon
 
     @CreateDateColumn({
