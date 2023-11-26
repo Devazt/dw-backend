@@ -86,9 +86,7 @@ export default new class SArticle {
                 return res.status(404).json({ message: "Data not found" });
             }
 
-            const checkId = await this.RepoArticle.findOne({where: {id} , relations: ["users"]});
-            console.log(checkId);
-            
+            const checkId = await this.RepoArticle.findOne({where: {id} , relations: ["users"]});            
             if (checkId.users.id !== newData.userId) {
                 return res.status(400).json({ message: "User not allowed to edit" });
             }

@@ -1,11 +1,11 @@
 # DOCUMENTATION
 
 ## LIST OF CONTENT
-1. [AUTH](##**AUTH**)
-2. [ARTICLE](##**ARTICLE**)
-3. [PASLON](##**PASLON**)
-4. [PARTAI](##**PARTAI**)
-5. [VOTE](##**VOTE**)
+1. [AUTH](#AUTH)
+2. [ARTICLE](#ARTICLE)
+3. [PASLON](#PASLON)
+4. [PARTAI](#PARTAI)
+5. [VOTE](#VOTE)
 
 ## **AUTH**
 ### Register
@@ -58,17 +58,17 @@
 
 ## **ARTICLE**
 ### Get all article
-* URL : `http://localhost:5000/api/v1/pemilu`
+* URL : `http://localhost:5000/api/v1/article`
 * Method : `GET`
 * Require Token : `No`
 
 ### Get article by ID
-* URL : `http://localhost:5000/api/v1/pemilu/:id`
+* URL : `http://localhost:5000/api/v1/article/:id`
 * Method : `GET`
 * Require Token : `No`
 
 ### Create/Post an article
-* URL : `http://localhost:5000/api/v1/pemilu/`
+* URL : `http://localhost:5000/api/v1/article/`
 * Method : `POST`
 * Require Token : `Yes`
 * Request Body :
@@ -94,7 +94,7 @@
 ```
 
 ### Update Article by ID
-* URL : `http://localhost:5000/api/v1/pemilu/:id`
+* URL : `http://localhost:5000/api/v1/article/:id`
 * Method : `PATCH`
 * Require Token : `Yes (With same Author/User)`
 * Request Body :
@@ -119,7 +119,7 @@
 }
 ```
 ### Delete article by ID
-* URL : `http://localhost:5000/api/v1/pemilu/:id`
+* URL : `http://localhost:5000/api/v1/article/:id`
 * Method : `DELETE`
 * Require Token : `Yes`
 
@@ -268,12 +268,12 @@
 
 ## **VOTE**
 ### Get all vote
-* URL : `http://localhost:5000/api/v1/peserta`
+* URL : `http://localhost:5000/api/v1/vote`
 * Method : `GET`
 * Require Token : `No`
 
 ### Add Vote
-* URL : `http://localhost:5000/api/v1/peserta`
+* URL : `http://localhost:5000/api/v1/vote`
 * Method : `POST`
 * Require Token : `YES`
 * Request Body :
@@ -292,5 +292,3 @@
     }
 }
 ```
-
-`the response may be differ since above not show relation value`
